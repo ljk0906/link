@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+</head>
+<body>
+<div>
+    <form id="login_form">
+        {% csrf_token %}
+    链接:<input type="text" name="url" id="url">
+    自定义key:<input type="text" name="custom_key" id="custom_key">
+    <input type="submit" value="提交" >
+    </form>
+    <div>
+        <p id="mlink"></p>
+    </div>
+</div>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $('#login_form').submit(function(e){
+		    e.preventDefault();
+    var csrf = $('input[name="csrfmiddlewaretoken"]').val()
+    var url = $("#url").val()
+    var custom_key = $("#custom_key").val()
+    $.ajax({
+        url: '/link/to_link/',
+        type: 'POST',
+        headers: {'X-CSRFToken': csrf},
+        dataType: 'json',
+        heads: {
+    	'content-type' : 'application/json'},
+        data: {
+			'url': url,
+            'custom_key': custom_key,
+        },
+        success: function(data){
+            alert(data.msg)
+            $("#mlink").html(data.msg)
+
+        },
+        error: function(data){
+            alert(data.msg)
+        }
+    })
+    });
+
+</script>
+</body>
+</html>
